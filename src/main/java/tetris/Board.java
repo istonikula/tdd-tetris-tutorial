@@ -4,28 +4,30 @@
 
 package tetris;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Board {
-
     private final int rows;
     private final int columns;
-    private Block block;
-    private int blockRow = 0;
-    private List<Block> staticBlocks = new ArrayList<>();
+
+    private Block[][] staticBlocks;
+
+    private Block fallingBlock;
+    private int fallingBlockRow;
+    private int fallingBlockCol;
 
     public Board(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
+        staticBlocks = new Block[rows][columns];
+        resetFalling();
     }
 
+    @Override
     public String toString() {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 Block b = getBlock(row, col);
-                s += b == null ? "." : b.toString();
+                s += b == null ? "." : b.getColor();
             }
             s += "\n";
         }
@@ -33,39 +35,56 @@ public class Board {
     }
 
     private Block getBlock(int row, int col) {
-        if (block != null && row == blockRow && col == 1) {
-            return block;
+        if (hasFallingAt(row, col)) {
+            return fallingBlock;
         }
-        Block staticBlock = getStaticBlock(row, col);
-        return staticBlock;
+        return getStaticBlock(row, col);
+    }
+
+    private boolean hasFallingAt(int row, int col) {
+        return hasFalling() && row == fallingBlockRow && col == fallingBlockCol;
     }
 
     private Block getStaticBlock(int row, int col) {
-        if (row == rows - 1 && col == 1  && !staticBlocks.isEmpty()) {
-            return staticBlocks.get(0);
-        }
-        return null;
+        return staticBlocks[row][col];
     }
 
     public boolean hasFalling() {
-        return block != null;
+        return fallingBlock != null;
     }
 
     public void drop(Block x) {
-        if (block != null) {
+        if (fallingBlock != null) {
             throw new IllegalStateException("already falling");
         }
 
-        this.block = x;
+        this.fallingBlock = x;
     }
 
     public void tick() {
-        if (blockRow == rows - 1) {
-            staticBlocks.add(block);
-            block = null;
-            blockRow = 0;
+        if (hitsBottom() || hitsStatic() ) {
+            moveToStatic();
         } else {
-            blockRow++;
+            fallingBlockRow++;
         }
+    }
+
+    private boolean hitsStatic() {
+        return getStaticBlock(fallingBlockRow + 1, fallingBlockCol) != null;
+    }
+
+    private void moveToStatic() {
+        staticBlocks[fallingBlockRow][fallingBlockCol] = fallingBlock;
+        resetFalling();
+    }
+
+    private boolean hitsBottom() {
+        return fallingBlockRow == rows - 1;
+    }
+
+    private void resetFalling() {
+        fallingBlock = null;
+        fallingBlockRow = 0;
+        fallingBlockCol = 1;
     }
 }

@@ -7,8 +7,7 @@ public class Block {
         this.color = color;
     }
 
-    @Override
-    public String toString() {
+    public String getColor() {
         return String.valueOf(color);
     }
 }
