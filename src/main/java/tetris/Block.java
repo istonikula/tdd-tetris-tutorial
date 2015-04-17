@@ -1,6 +1,14 @@
 package tetris;
 
 public class Block {
-    public Block(char x) {
+    private final char color;
+
+    public Block(char color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(color);
     }
 }

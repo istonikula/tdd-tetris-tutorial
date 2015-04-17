@@ -24,23 +24,27 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                if (hasBlock(row, col)) {
-                    s += "X";
-                } else {
-                    s += ".";
-                }
+                Block b = getBlock(row, col);
+                s += b == null ? "." : b.toString();
             }
             s += "\n";
         }
         return s;
     }
 
-    private boolean hasBlock(int row, int col) {
-        return (block != null && row == blockRow && col == 1) || hasStaticBlock(row, col);
+    private Block getBlock(int row, int col) {
+        if (block != null && row == blockRow && col == 1) {
+            return block;
+        }
+        Block staticBlock = getStaticBlock(row, col);
+        return staticBlock;
     }
 
-    private boolean hasStaticBlock(int row, int col) {
-        return row == rows - 1 && col == 1  && !staticBlocks.isEmpty();
+    private Block getStaticBlock(int row, int col) {
+        if (row == rows - 1 && col == 1  && !staticBlocks.isEmpty()) {
+            return staticBlocks.get(0);
+        }
+        return null;
     }
 
     public boolean hasFalling() {
@@ -59,7 +63,9 @@ public class Board {
         if (blockRow == rows - 1) {
             staticBlocks.add(block);
             block = null;
+            blockRow = 0;
+        } else {
+            blockRow++;
         }
-        blockRow++;
     }
 }
