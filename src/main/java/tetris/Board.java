@@ -61,8 +61,6 @@ public class Board {
             throw new IllegalStateException("already falling");
         }
         fallingGrid = new MovableGrid(x);
-        fallingGrid.row = 0;
-        fallingGrid.col = columns / 2 - x.cols() / 2;
     }
 
     public void tick() {
@@ -70,7 +68,7 @@ public class Board {
             copyToBoard();
             fallingGrid = null;
         } else {
-            fallingGrid.row++;
+            fallingGrid = fallingGrid.moveDown();
         }
     }
 
@@ -112,13 +110,13 @@ public class Board {
 
     public void moveLeft() {
         if (!hitsLeft()) {
-            fallingGrid.col--;
+            fallingGrid = fallingGrid.moveLeft();
         }
     }
 
     public void moveRight() {
         if (!hitsRight()) {
-            fallingGrid.col++;
+            fallingGrid = fallingGrid.moveRight();
         }
     }
 
@@ -154,12 +152,30 @@ public class Board {
 
 
     public class MovableGrid implements Grid {
-        private int row;
-        public int col;
         private final Grid g;
+        public final int row;
+        public final int col;
 
         public MovableGrid(Grid g) {
+            this(g, 0, columns / 2 - g.cols() / 2);
+        }
+
+        public MovableGrid(Grid g, int row, int col) {
             this.g = g;
+            this.row = row;
+            this.col = col;
+        }
+
+        public MovableGrid moveLeft() {
+            return new MovableGrid(g, row, col-1);
+        }
+
+        public MovableGrid moveRight() {
+            return new MovableGrid(g, row, col+1);
+        }
+
+        public MovableGrid moveDown() {
+            return new MovableGrid(g, row+1, col);
         }
 
         @Override
