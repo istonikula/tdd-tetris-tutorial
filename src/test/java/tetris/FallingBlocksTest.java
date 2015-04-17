@@ -37,7 +37,6 @@ public class FallingBlocksTest extends Assert {
         }
     }
 
-/*
     public class When_a_block_is_dropped {
 
         @Before
@@ -81,7 +80,6 @@ public class FallingBlocksTest extends Assert {
 //                    "...\n", board.toString());
 //        }
     }
-*/
 
 /*
     public class When_a_block_reaches_the_bottom {
