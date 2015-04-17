@@ -114,4 +114,7 @@ public class Board {
         return false;
     }
 
+    public void moveLeft() {
+        fallingGridCol--;
+    }
 }
