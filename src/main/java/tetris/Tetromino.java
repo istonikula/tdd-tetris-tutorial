@@ -1,7 +1,10 @@
 package tetris;
 
 public class Tetromino {
-    public static final Tetromino T_SHAPE = new Tetromino(new Piece(""));
+    public static final Tetromino T_SHAPE = new Tetromino(new Piece(
+            ".T.\n" +
+            "TTT\n" +
+            "...\n"));
 
     private final Piece piece;
 
@@ -15,5 +18,10 @@ public class Tetromino {
 
     public Tetromino rotateLeft() {
         return new Tetromino(piece.rotateLeft());
+    }
+
+    @Override
+    public String toString() {
+        return piece.toString();
     }
 }
