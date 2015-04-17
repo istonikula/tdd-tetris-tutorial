@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 /**
  * @author Esko Luontola
  */
-@Ignore("contains no test")
 @RunWith(NestedJUnit.class)
 public class RotatingTetrominoesTest extends Assert {
 
@@ -20,7 +19,6 @@ public class RotatingTetrominoesTest extends Assert {
     // - See README for how "Tetromino" is different from "Piece"
     // - Next step: FallingPiecesTest
 
-/*
     private Tetromino shape;
 
 
@@ -40,7 +38,6 @@ public class RotatingTetrominoesTest extends Assert {
             assertEquals(original, shape.toString());
         }
     }
-*/
 
 /*
     public class The_T_shape {
