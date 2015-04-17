@@ -9,6 +9,7 @@ public class Board {
     private final int rows;
     private final int columns;
     private Block block;
+    private int blockRow = 0;
 
     public Board(int rows, int columns) {
         this.rows = rows;
@@ -19,7 +20,7 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                if (block != null && row == 0 && col == 1) {
+                if (block != null && row == blockRow && col == 1) {
                     s += "X";
                 } else {
                     s += ".";
@@ -36,5 +37,9 @@ public class Board {
 
     public void drop(Block x) {
         this.block = x;
+    }
+
+    public void tick() {
+        blockRow++;
     }
 }
