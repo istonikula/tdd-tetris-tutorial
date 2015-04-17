@@ -40,14 +40,22 @@ public class RotatingPiecesOfBlocksTest extends Assert {
                     "...\n", piece.toString());
         }
 
-//        @Test
-//        public void can_be_rotated_right() {
-//            piece = piece.rotateRight();
-//            assertEquals("" +
-//                    "...\n" +
-//                    ".XX\n" +
-//                    "...\n", piece.toString());
-//        }
+        // 0,0 -> 0,c-1
+        // 0,2 -> 1,c-1
+        // 0,3 -> r-1,c-1
+
+        // 1,0 -> 0,1
+        // 1,1 -> 1,1
+        // 1,c-1 -> r-1,1
+        @Ignore
+        @Test
+        public void can_be_rotated_right() {
+            piece = piece.rotateRight();
+            assertEquals("" +
+                    "...\n" +
+                    ".XX\n" +
+                    "...\n", piece.toString());
+        }
 
 //        @Test
 //        public void can_be_rotated_left() {
