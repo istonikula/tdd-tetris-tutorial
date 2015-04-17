@@ -64,25 +64,14 @@ public class Board {
     }
 
     public void tick() {
-        if (hitsBottom() || hitsStatic()) {
-            copyToBoard();
-            fallingGrid = null;
-        } else {
-            fallingGrid = fallingGrid.moveDown();
-        }
+        moveDown();
     }
 
-    private boolean hitsStatic() {
-        for (int row = 0; row < fallingGrid.rows(); row++) {
-            for (int col = 0; col < fallingGrid.cols(); col++) {
-                if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (board[fallingGrid.boardRow + row + 1][fallingGrid.boardCol + col] != EMPTY) {
-                        return true;
-                    }
-                }
-            }
+    public void moveLeft() {
+        MovableGrid candidate = fallingGrid.moveLeft();
+        if (isValidMove(candidate)) {
+            fallingGrid = candidate;
         }
-        return false;
     }
 
     private void copyToBoard() {
@@ -95,30 +84,20 @@ public class Board {
         }
     }
 
-    private boolean hitsBottom() {
-        for (int row = 0; row < fallingGrid.rows(); row++) {
-            for (int col = 0; col < fallingGrid.cols(); col++) {
-                if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (fallingGrid.boardRow + row == rows - 1) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public void moveLeft() {
-        MovableGrid candidate = fallingGrid.moveLeft();
-        if (isValidMove(candidate)) {
-            fallingGrid = candidate;
-        }
-    }
-
     public void moveRight() {
         MovableGrid candidate = fallingGrid.moveRight();
         if (isValidMove(candidate)) {
             fallingGrid = candidate;
+        }
+    }
+
+    public void moveDown() {
+        MovableGrid candidate = fallingGrid.moveDown();
+        if (isValidMove(candidate)) {
+            fallingGrid = candidate;
+        } else {
+            copyToBoard();
+            fallingGrid = null;
         }
     }
 
@@ -143,10 +122,6 @@ public class Board {
 
     private boolean isOutsideBoard(int row, int col) {
         return row < 0 || row > rows - 1 || col < 0 || col > columns - 1;
-    }
-
-    public void moveDown() {
-        tick();
     }
 
     public class MovableGrid implements Grid {
