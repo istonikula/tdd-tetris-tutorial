@@ -1,6 +1,6 @@
 package tetris;
 
-public class Tetromino {
+public class Tetromino implements Grid {
     public static final Tetromino T_SHAPE = new Tetromino(
             new Piece(
                 ".T.\n" +
@@ -64,5 +64,20 @@ public class Tetromino {
     @Override
     public String toString() {
         return pieces[position].toString();
+    }
+
+    @Override
+    public int rows() {
+        return pieces[0].size();
+    }
+
+    @Override
+    public int cols() {
+        return pieces[0].size();
+    }
+
+    @Override
+    public char cellAt(int row, int col) {
+        return pieces[position].cellAt(row, col);
     }
 }

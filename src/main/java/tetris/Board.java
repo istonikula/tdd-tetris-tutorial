@@ -8,16 +8,21 @@ public class Board {
     private final int rows;
     private final int columns;
 
-    private Block[][] staticBlocks;
+    private char[][] board;
 
-    private Block fallingBlock;
-    private int fallingBlockRow;
-    private int fallingBlockCol;
+    private Grid fallingGrid;
+    private int fallingGridRow;
+    private int fallingGridCol;
 
     public Board(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        staticBlocks = new Block[rows][columns];
+        board = new char[rows][columns];
+        for (int i = 0; i < rows ; i++) {
+            for (int j = 0; j < columns; j++) {
+                board[i][j] = '.';
+            }
+        }
         resetFalling();
     }
 
@@ -26,65 +31,68 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                Block b = getBlock(row, col);
-                s += b == null ? "." : b.getColor();
+                s += cellAt(row, col);
             }
             s += "\n";
         }
         return s;
     }
 
-    private Block getBlock(int row, int col) {
+    private char cellAt(int row, int col) {
         if (hasFallingAt(row, col)) {
-            return fallingBlock;
+            return fallingGrid.cellAt(row - fallingGridRow, col - fallingGridCol);
         }
-        return getStaticBlock(row, col);
+        return staticAt(row, col);
     }
 
     private boolean hasFallingAt(int row, int col) {
-        return hasFalling() && row == fallingBlockRow && col == fallingBlockCol;
+        return hasFalling() &&
+                row >= fallingGridRow &&
+                row < fallingGridRow + fallingGrid.rows() &&
+                col >= fallingGridCol &&
+                col < fallingGridCol + fallingGrid.cols();
     }
 
-    private Block getStaticBlock(int row, int col) {
-        return staticBlocks[row][col];
+    private char staticAt(int row, int col) {
+        return board[row][col];
     }
 
     public boolean hasFalling() {
-        return fallingBlock != null;
+        return fallingGrid != null;
     }
 
-    public void drop(Block x) {
-        if (fallingBlock != null) {
+    public void drop(Grid x) {
+        if (fallingGrid != null) {
             throw new IllegalStateException("already falling");
         }
+        fallingGridRow = 0;
+        fallingGridCol = columns/2  - x.cols()/2;
 
-        this.fallingBlock = x;
+        this.fallingGrid = x;
     }
 
     public void tick() {
         if (hitsBottom() || hitsStatic() ) {
-            moveToStatic();
+            copyToBoard();
         } else {
-            fallingBlockRow++;
+            fallingGridRow++;
         }
     }
 
     private boolean hitsStatic() {
-        return getStaticBlock(fallingBlockRow + 1, fallingBlockCol) != null;
+        return staticAt(fallingGridRow + 1, fallingGridCol) != '.';
     }
 
-    private void moveToStatic() {
-        staticBlocks[fallingBlockRow][fallingBlockCol] = fallingBlock;
+    private void copyToBoard() {
+        board[fallingGridRow][fallingGridCol] = fallingGrid.cellAt(fallingGridRow, fallingGridCol);
         resetFalling();
     }
 
     private boolean hitsBottom() {
-        return fallingBlockRow == rows - 1;
+        return fallingGridRow == rows - 1;
     }
 
     private void resetFalling() {
-        fallingBlock = null;
-        fallingBlockRow = 0;
-        fallingBlockCol = 1;
+        fallingGrid = null;
     }
 }

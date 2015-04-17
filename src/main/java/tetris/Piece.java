@@ -9,11 +9,9 @@ public class Piece {
 
         for (int i = 0; i < split.length; i++) {
             String row = split[i];
-            for (int j = 0; j < row.length() ; j++) {
+            for (int j = 0; j < row.length(); j++) {
                 char c = row.charAt(j);
-                if (c != '.') {
-                    blocks[i][j] = new Block(c);
-                }
+                blocks[i][j] = new Block(c);
             }
         }
     }
@@ -31,11 +29,11 @@ public class Piece {
     // r-1,2 -> r-1,0
     public Piece rotateRight() {
         Block[][] rotated = new Block[blocks.length][blocks.length];
-        int n = blocks.length-1;
+        int n = blocks.length - 1;
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks[i].length; j++) {
                 int newRow = j;
-                int newCol = n-i;
+                int newCol = n - i;
 //                System.out.println("i -> newRow = " + i + " -> " + newRow);
 //                System.out.println("j -> newCol = " + j + " -> " + newCol);
                 rotated[newRow][newCol] = blocks[i][j];
@@ -52,7 +50,7 @@ public class Piece {
     private String blocksToString(Block[][] blocks) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; j < blocks[i].length; j++ ) {
+            for (int j = 0; j < blocks[i].length; j++) {
                 Block b = blocks[i][j];
                 if (b == null) {
                     sb.append(".");
@@ -67,5 +65,13 @@ public class Piece {
 
     public Piece rotateLeft() {
         return rotateRight().rotateRight().rotateRight();
+    }
+
+    public int size() {
+        return blocks.length;
+    }
+
+    public char cellAt(int row, int col) {
+        return blocks[row][col].getColor();
     }
 }
