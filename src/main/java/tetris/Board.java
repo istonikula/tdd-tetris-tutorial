@@ -19,7 +19,11 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                s += ".";
+                if (block != null && row == 0 && col == 1) {
+                    s += "X";
+                } else {
+                    s += ".";
+                }
             }
             s += "\n";
         }
