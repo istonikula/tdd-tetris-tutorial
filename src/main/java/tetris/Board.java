@@ -38,18 +38,18 @@ public class Board {
 
     private char cellAt(int row, int col) {
         if (hasFallingAt(row, col)) {
-            return fallingGrid.cellAt(row - fallingGrid.row, col - fallingGrid.col);
+            return fallingGrid.cellAt(row - fallingGrid.boardRow, col - fallingGrid.boardCol);
         }
         return board[row][col];
     }
 
     private boolean hasFallingAt(int row, int col) {
         return hasFalling() &&
-                row >= fallingGrid.row &&
-                row < fallingGrid.row + fallingGrid.rows() &&
-                col >= fallingGrid.col &&
-                col < fallingGrid.col + fallingGrid.cols() &&
-                fallingGrid.cellAt(row - fallingGrid.row, col - fallingGrid.col) != EMPTY;
+                row >= fallingGrid.boardRow &&
+                row < fallingGrid.boardRow + fallingGrid.rows() &&
+                col >= fallingGrid.boardCol &&
+                col < fallingGrid.boardCol + fallingGrid.cols() &&
+                fallingGrid.cellAt(row - fallingGrid.boardRow, col - fallingGrid.boardCol) != EMPTY;
     }
 
     public boolean hasFalling() {
@@ -76,7 +76,7 @@ public class Board {
         for (int row = 0; row < fallingGrid.rows(); row++) {
             for (int col = 0; col < fallingGrid.cols(); col++) {
                 if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (board[fallingGrid.row + row + 1][fallingGrid.col + col] != EMPTY) {
+                    if (board[fallingGrid.boardRow + row + 1][fallingGrid.boardCol + col] != EMPTY) {
                         return true;
                     }
                 }
@@ -89,7 +89,7 @@ public class Board {
         for (int row = 0; row < fallingGrid.rows(); row++) {
             for (int col = 0; col < fallingGrid.cols(); col++) {
                 if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    board[fallingGrid.row + row][fallingGrid.col + col] = fallingGrid.cellAt(row, col);
+                    board[fallingGrid.boardRow + row][fallingGrid.boardCol + col] = fallingGrid.cellAt(row, col);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class Board {
         for (int row = 0; row < fallingGrid.rows(); row++) {
             for (int col = 0; col < fallingGrid.cols(); col++) {
                 if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (fallingGrid.row + row == rows - 1) {
+                    if (fallingGrid.boardRow + row == rows - 1) {
                         return true;
                     }
                 }
@@ -109,73 +109,71 @@ public class Board {
     }
 
     public void moveLeft() {
-        if (!hitsLeft()) {
-            fallingGrid = fallingGrid.moveLeft();
+        MovableGrid candidate = fallingGrid.moveLeft();
+        if (isValidMove(candidate)) {
+            fallingGrid = candidate;
         }
     }
 
     public void moveRight() {
-        if (!hitsRight()) {
-            fallingGrid = fallingGrid.moveRight();
+        MovableGrid candidate = fallingGrid.moveRight();
+        if (isValidMove(candidate)) {
+            fallingGrid = candidate;
         }
     }
 
-    private boolean hitsLeft() {
-        for (int col = 0; col < fallingGrid.cols(); col++) {
-            for (int row = 0; row < fallingGrid.rows(); row++) {
-                if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (fallingGrid.col + col == 0) {
-                        return true;
+    private boolean isValidMove(MovableGrid g) {
+        for (int row = 0; row < g.rows(); row++) {
+            for (int col = 0; col < g.cols(); col++) {
+                if (g.cellAt(row, col) != EMPTY) {
+                    int r = g.boardRow + row;
+                    int c = g.boardCol + col;
+                    if (isOutsideBoard(r, c) || hitsStaticBlock(r, c)) {
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    private boolean hitsRight() {
-        for (int col = 0; col < fallingGrid.cols(); col++) {
-            for (int row = 0; row < fallingGrid.rows(); row++) {
-                if (fallingGrid.cellAt(row, col) != EMPTY) {
-                    if (fallingGrid.col + col == columns - 1) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    private boolean hitsStaticBlock(int row, int col) {
+        return board[row][col] != EMPTY;
+    }
+
+    private boolean isOutsideBoard(int row, int col) {
+        return row < 0 || row > rows - 1 || col < 0 || col > columns - 1;
     }
 
     public void moveDown() {
         tick();
     }
 
-
     public class MovableGrid implements Grid {
         private final Grid g;
-        public final int row;
-        public final int col;
+        public final int boardRow;
+        public final int boardCol;
 
         public MovableGrid(Grid g) {
             this(g, 0, columns / 2 - g.cols() / 2);
         }
 
-        public MovableGrid(Grid g, int row, int col) {
+        private MovableGrid(Grid g, int boardRow, int boardCol) {
             this.g = g;
-            this.row = row;
-            this.col = col;
+            this.boardRow = boardRow;
+            this.boardCol = boardCol;
         }
 
         public MovableGrid moveLeft() {
-            return new MovableGrid(g, row, col-1);
+            return new MovableGrid(g, boardRow, boardCol - 1);
         }
 
         public MovableGrid moveRight() {
-            return new MovableGrid(g, row, col+1);
+            return new MovableGrid(g, boardRow, boardCol + 1);
         }
 
         public MovableGrid moveDown() {
-            return new MovableGrid(g, row+1, col);
+            return new MovableGrid(g, boardRow + 1, boardCol);
         }
 
         @Override
