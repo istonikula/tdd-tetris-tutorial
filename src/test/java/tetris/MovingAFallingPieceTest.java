@@ -34,7 +34,6 @@ public class MovingAFallingPieceTest extends Assert {
                     "........\n" +
                     "........\n" +
                     "........\n", board.toString());
-
         }
 
         @Test
@@ -48,10 +47,20 @@ public class MovingAFallingPieceTest extends Assert {
                     "........\n" +
                     "........\n", board.toString());
         }
+
+        @Test
+        public void can_be_moved_down() {
+            board.moveDown();
+            assertEquals("" +
+                    "........\n" +
+                    "....T...\n" +
+                    "...TTT..\n" +
+                    "........\n" +
+                    "........\n" +
+                    "........\n", board.toString());
+        }
     }
 
-    // TODO: a falling piece can be moved right
-    // TODO: a falling piece can be moved down
     // TODO: it will not move left over the board
     // TODO: it will not move right over the board
     // TODO: it will not move down over the board (will stop falling)

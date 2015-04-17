@@ -121,4 +121,8 @@ public class Board {
     public void moveRight() {
         fallingGridCol++;
     }
+
+    public void moveDown() {
+        tick();
+    }
 }
