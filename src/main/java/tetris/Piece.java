@@ -18,8 +18,39 @@ public class Piece {
         }
     }
 
+    // 0,0 -> 0,c-1
+    // 0,2 -> 1,c-1
+    // 0,3 -> r-1,c-1
+
+    // 1,0 -> 0,1
+    // 1,1 -> 1,1
+    // 1,c-1 -> r-1,1
+
+    // r-1,0 -> 0,0
+    // r-1,1 -> 1,0
+    // r-1,2 -> r-1,0
+    public Piece rotateRight() {
+        Block[][] rotated = new Block[blocks.length][blocks.length];
+        int n = blocks.length-1;
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks[i].length; j++) {
+                int newRow = j;
+                int newCol = n-i;
+//                System.out.println("i -> newRow = " + i + " -> " + newRow);
+//                System.out.println("j -> newCol = " + j + " -> " + newCol);
+                rotated[newRow][newCol] = blocks[i][j];
+            }
+        }
+
+        return new Piece(blocksToString(rotated));
+    }
+
     @Override
     public String toString() {
+        return blocksToString(blocks);
+    }
+
+    private String blocksToString(Block[][] blocks) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks[i].length; j++ ) {
@@ -33,9 +64,5 @@ public class Piece {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    public Piece rotateRight() {
-        return null;
     }
 }

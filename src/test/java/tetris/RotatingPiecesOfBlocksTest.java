@@ -47,7 +47,10 @@ public class RotatingPiecesOfBlocksTest extends Assert {
         // 1,0 -> 0,1
         // 1,1 -> 1,1
         // 1,c-1 -> r-1,1
-        @Ignore
+
+        // r-1,0 -> 0,0
+        // r-1,1 -> 1,0
+        // r-1,2 -> r-1,0
         @Test
         public void can_be_rotated_right() {
             piece = piece.rotateRight();
