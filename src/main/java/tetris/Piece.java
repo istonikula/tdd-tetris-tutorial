@@ -65,4 +65,8 @@ public class Piece {
         }
         return sb.toString();
     }
+
+    public Piece rotateLeft() {
+        return rotateRight().rotateRight().rotateRight();
+    }
 }
