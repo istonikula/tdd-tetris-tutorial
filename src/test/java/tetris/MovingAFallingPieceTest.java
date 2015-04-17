@@ -36,6 +36,18 @@ public class MovingAFallingPieceTest extends Assert {
                     "........\n", board.toString());
 
         }
+
+        @Test
+        public void can_be_moved_right() {
+            board.moveRight();
+            assertEquals("" +
+                    ".....T..\n" +
+                    "....TTT.\n" +
+                    "........\n" +
+                    "........\n" +
+                    "........\n" +
+                    "........\n", board.toString());
+        }
     }
 
     // TODO: a falling piece can be moved right
