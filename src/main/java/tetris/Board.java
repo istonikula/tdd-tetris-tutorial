@@ -4,12 +4,16 @@
 
 package tetris;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
     private final int rows;
     private final int columns;
     private Block block;
     private int blockRow = 0;
+    private List<Block> staticBlocks = new ArrayList<>();
 
     public Board(int rows, int columns) {
         this.rows = rows;
@@ -20,7 +24,7 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                if (block != null && row == blockRow && col == 1) {
+                if (hasBlock(row, col)) {
                     s += "X";
                 } else {
                     s += ".";
@@ -29,6 +33,14 @@ public class Board {
             s += "\n";
         }
         return s;
+    }
+
+    private boolean hasBlock(int row, int col) {
+        return (block != null && row == blockRow && col == 1) || hasStaticBlock(row, col);
+    }
+
+    private boolean hasStaticBlock(int row, int col) {
+        return row == rows - 1 && col == 1  && !staticBlocks.isEmpty();
     }
 
     public boolean hasFalling() {
@@ -44,6 +56,10 @@ public class Board {
     }
 
     public void tick() {
+        if (blockRow == rows - 1) {
+            staticBlocks.add(block);
+            block = null;
+        }
         blockRow++;
     }
 }
