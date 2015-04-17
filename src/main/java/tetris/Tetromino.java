@@ -6,6 +6,13 @@ public class Tetromino {
             "TTT\n" +
             "...\n"));
 
+    public static final Tetromino I_SHAPE = new Tetromino(new Piece(
+            ".....\n" +
+            ".....\n" +
+            "IIII.\n" +
+            ".....\n" +
+            ".....\n"));
+
     private final Piece piece;
 
     private Tetromino(Piece p) {

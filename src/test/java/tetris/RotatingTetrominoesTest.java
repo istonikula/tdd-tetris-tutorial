@@ -102,7 +102,6 @@ public class RotatingTetrominoesTest extends Assert {
         }
     }
 
-/*
     public class The_I_shape {
 
         @Before
@@ -151,7 +150,6 @@ public class RotatingTetrominoesTest extends Assert {
 //            assertEquals(originalShape, shape.toString());
 //        }
     }
-*/
 
 /*
     public class The_O_shape {
