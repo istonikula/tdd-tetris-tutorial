@@ -4,13 +4,13 @@
 
 package tetris;
 
+import java.util.Arrays;
+
 public class Board {
-    public static final char EMPTY = '.';
+    private static final char EMPTY = '.';
     private final int rows;
     private final int columns;
-
     private char[][] board;
-
     private MovableGrid fallingGrid;
 
     public Board(int rows, int columns) {
@@ -18,22 +18,20 @@ public class Board {
         this.columns = columns;
         board = new char[rows][columns];
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                board[i][j] = EMPTY;
-            }
+            Arrays.fill(board[i], EMPTY);
         }
     }
 
     @Override
     public String toString() {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                s += cellAt(row, col);
+                sb.append(cellAt(row, col));
             }
-            s += "\n";
+            sb.append("\n");
         }
-        return s;
+        return sb.toString();
     }
 
     private char cellAt(int row, int col) {
@@ -44,12 +42,7 @@ public class Board {
     }
 
     private boolean hasFallingAt(int row, int col) {
-        return hasFalling() &&
-                row >= fallingGrid.boardRow &&
-                row < fallingGrid.boardRow + fallingGrid.rows() &&
-                col >= fallingGrid.boardCol &&
-                col < fallingGrid.boardCol + fallingGrid.cols() &&
-                fallingGrid.cellAt(row - fallingGrid.boardRow, col - fallingGrid.boardCol) != EMPTY;
+        return hasFalling() && fallingGrid.isAt(row, col);
     }
 
     public boolean hasFalling() {
@@ -149,6 +142,14 @@ public class Board {
 
         public MovableGrid moveDown() {
             return new MovableGrid(g, boardRow + 1, boardCol);
+        }
+
+        public boolean isAt(int row, int col) {
+            return row >= boardRow &&
+                    row < boardRow + rows() &&
+                    col >= boardCol &&
+                    col < boardCol + cols() &&
+                    cellAt(row - boardRow, col - boardCol) != EMPTY;
         }
 
         @Override
