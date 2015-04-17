@@ -21,11 +21,11 @@ public class Piece {
     // 0,0 -> 0,c-1
     // 0,2 -> 1,c-1
     // 0,3 -> r-1,c-1
-
+    //
     // 1,0 -> 0,1
     // 1,1 -> 1,1
     // 1,c-1 -> r-1,1
-
+    //
     // r-1,0 -> 0,0
     // r-1,1 -> 1,0
     // r-1,2 -> r-1,0
@@ -41,7 +41,6 @@ public class Piece {
                 rotated[newRow][newCol] = blocks[i][j];
             }
         }
-
         return new Piece(blocksToString(rotated));
     }
 
