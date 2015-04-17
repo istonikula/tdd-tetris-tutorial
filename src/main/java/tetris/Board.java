@@ -43,7 +43,7 @@ public class Board {
         if (hasFallingAt(row, col)) {
             return fallingGrid.cellAt(row - fallingGridRow, col - fallingGridCol);
         }
-        return staticAt(row, col);
+        return board[row][col];
     }
 
     private boolean hasFallingAt(int row, int col) {
@@ -51,11 +51,8 @@ public class Board {
                 row >= fallingGridRow &&
                 row < fallingGridRow + fallingGrid.rows() &&
                 col >= fallingGridCol &&
-                col < fallingGridCol + fallingGrid.cols();
-    }
-
-    private char staticAt(int row, int col) {
-        return board[row][col];
+                col < fallingGridCol + fallingGrid.cols() &&
+                fallingGrid.cellAt(row - fallingGridRow, col - fallingGridCol) != EMPTY;
     }
 
     public boolean hasFalling() {
@@ -82,7 +79,16 @@ public class Board {
     }
 
     private boolean hitsStatic() {
-        return staticAt(fallingGridRow + 1, fallingGridCol) != EMPTY;
+        for (int row = 0; row < fallingGrid.rows(); row++) {
+            for (int col = 0; col < fallingGrid.cols(); col++) {
+                if (fallingGrid.cellAt(row, col) != EMPTY) {
+                    if (board[fallingGridRow + row + 1][fallingGridCol + col] != EMPTY) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void copyToBoard() {
