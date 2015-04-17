@@ -115,7 +115,22 @@ public class Board {
     }
 
     public void moveLeft() {
-        fallingGridCol--;
+        if (!hitsLeft()) {
+            fallingGridCol--;
+        }
+    }
+
+    private boolean hitsLeft() {
+        for (int col = 0; col < fallingGrid.cols(); col++) {
+            for (int row = 0; row < fallingGrid.rows(); row++) {
+                if (fallingGrid.cellAt(row, col) != EMPTY) {
+                    if (fallingGridCol + col == 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void moveRight() {
