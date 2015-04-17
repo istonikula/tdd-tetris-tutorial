@@ -120,6 +120,12 @@ public class Board {
         }
     }
 
+    public void moveRight() {
+        if (!hitsRight()) {
+            fallingGridCol++;
+        }
+    }
+
     private boolean hitsLeft() {
         for (int col = 0; col < fallingGrid.cols(); col++) {
             for (int row = 0; row < fallingGrid.rows(); row++) {
@@ -133,8 +139,17 @@ public class Board {
         return false;
     }
 
-    public void moveRight() {
-        fallingGridCol++;
+    private boolean hitsRight() {
+        for (int col = 0; col < fallingGrid.cols(); col++) {
+            for (int row = 0; row < fallingGrid.rows(); row++) {
+                if (fallingGrid.cellAt(row, col) != EMPTY) {
+                    if (fallingGridCol + col == columns - 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void moveDown() {
