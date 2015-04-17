@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 /**
  * @author Esko Luontola
  */
-@Ignore("contains no test")
 @RunWith(NestedJUnit.class)
 public class RotatingPiecesOfBlocksTest extends Assert {
 
@@ -20,7 +19,6 @@ public class RotatingPiecesOfBlocksTest extends Assert {
     // - See README for motivation
     // - Next step: RotatingTetrominoesTest
 
-/*
     private Piece piece;
 
 
@@ -60,7 +58,6 @@ public class RotatingPiecesOfBlocksTest extends Assert {
 //                    "...\n", piece.toString());
 //        }
     }
-*/
 
 /*
     public class A_piece_of_5x5_blocks {
