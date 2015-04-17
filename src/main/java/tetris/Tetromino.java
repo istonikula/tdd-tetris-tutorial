@@ -34,13 +34,18 @@ public class Tetromino {
                 "..I..\n" +
                 ".....\n")
     );
+    public static final Tetromino O_SHAPE = new Tetromino(
+            new Piece(
+                ".OO\n" +
+                ".OO\n" +
+                "...\n")
+    );
 
     private final Piece[] pieces;
     private final int position;
 
     private Tetromino(Piece... p) {
         this(0, p);
-
     }
 
     public Tetromino(int pos, Piece[] pieces) {
