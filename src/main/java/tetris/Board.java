@@ -5,6 +5,7 @@
 package tetris;
 
 public class Board {
+    public static final char EMPTY = '.';
     private final int rows;
     private final int columns;
 
@@ -18,12 +19,12 @@ public class Board {
         this.rows = rows;
         this.columns = columns;
         board = new char[rows][columns];
-        for (int i = 0; i < rows ; i++) {
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                board[i][j] = '.';
+                board[i][j] = EMPTY;
             }
         }
-        resetFalling();
+        fallingGrid = null;
     }
 
     @Override
@@ -66,33 +67,45 @@ public class Board {
             throw new IllegalStateException("already falling");
         }
         fallingGridRow = 0;
-        fallingGridCol = columns/2  - x.cols()/2;
+        fallingGridCol = columns / 2 - x.cols() / 2;
 
         this.fallingGrid = x;
     }
 
     public void tick() {
-        if (hitsBottom() || hitsStatic() ) {
+        if (hitsBottom() || hitsStatic()) {
             copyToBoard();
+            fallingGrid = null;
         } else {
             fallingGridRow++;
         }
     }
 
     private boolean hitsStatic() {
-        return staticAt(fallingGridRow + 1, fallingGridCol) != '.';
+        return staticAt(fallingGridRow + 1, fallingGridCol) != EMPTY;
     }
 
     private void copyToBoard() {
-        board[fallingGridRow][fallingGridCol] = fallingGrid.cellAt(fallingGridRow, fallingGridCol);
-        resetFalling();
+        for (int row = 0; row < fallingGrid.rows(); row++) {
+            for (int col = 0; col < fallingGrid.cols(); col++) {
+                if (fallingGrid.cellAt(row, col) != EMPTY) {
+                    board[fallingGridRow + row][fallingGridCol + col] = fallingGrid.cellAt(row, col);
+                }
+            }
+        }
     }
 
     private boolean hitsBottom() {
-        return fallingGridRow == rows - 1;
+        for (int row = 0; row < fallingGrid.rows(); row++) {
+            for (int col = 0; col < fallingGrid.cols(); col++) {
+                if (fallingGrid.cellAt(row, col) != EMPTY) {
+                    if (fallingGridRow + row == rows - 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    private void resetFalling() {
-        fallingGrid = null;
-    }
 }
